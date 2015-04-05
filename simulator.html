@@ -1,0 +1,54 @@
+<head>
+
+<script type='text/javascript' src='./js/create_char.js'></script>
+<script type="text/javascript">
+    var heroes = []
+    function add_chars() {
+        //code
+        for (var i=1; i<=8; i++) {
+            //code
+            heroes[i] = add_char(document.getElementById('td'+i), i)
+        }
+    }
+    
+    var turn = 0
+    function calculate_turn(){
+        turn++
+        show = document.getElementById('show')
+        var history = show.innerHTML
+        var result = ''
+        result += '<p>'
+        result += 'turn' + turn
+        
+        result += '</p>'
+        show.innerHTML = result+history
+    }
+   
+    
+</script>
+
+</head>
+<body onload='add_chars()'>
+    <table id='attack' border="1">
+    <tr>
+        <th colspan=2>守方</th>
+        <th colspan=2>攻方</th>
+    </tr>
+    <tr>
+        <td id='td1'></td>
+        <td id='td2'></td>
+        <td id='td5'></td>
+        <td id='td6'></td>
+    </tr>
+    <tr>
+        <td id='td3'></td>
+        <td id='td4'></td>
+        <td id='td7'></td>
+        <td id='td8'></td>
+    </tr>
+    </table>
+    <input type="button" value="计算下一回合" onclick="calculate_turn()"/>
+    <br>
+    <span id="show"></span>
+
+</body>
