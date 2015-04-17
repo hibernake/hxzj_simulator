@@ -1,6 +1,6 @@
 
 // 根据生产者和范围，计算作用对象
-function get_targets(cur_id, range, check_targets) {
+function get_targets(heroes, cur_id, range, check_targets) {
     // 根据目标的优先级计算一个目标队列
     'use strict'
     let p = new Array()
@@ -63,14 +63,38 @@ function get_targets(cur_id, range, check_targets) {
     
     // 检验目标并返回
     for (let i in p) {
-        let s = check_targets(p[i])
+        let q = []
+        for (let j in p[i]){
+            q[j] = heroes[p[i][j]]
+        }
+        let s = check_targets(q)
         if (s.length>0) {
             return s
         }
     }
 }
 
-function do_action(heros, cur_id, record) {
+// 源对目标造成伤害
+// 同时增加能量
+function do_damages(source, targets, ratio, record) {
+    'use strict'
+    function do_damage_single(target){
+        let damage = parseInt(source.att * ratio / 100)
+        target.get_damage(damage)
+    }
+    source.add_en(1)
+    let text = ''
+    for (let i in targets) {
+        let target = targets[i]
+        do_damage_single(target)
+        target.add_en(1)
+        
+        text += source.kind + '攻击了' + target.kind + '\n'
+    }
+    record(text)
+}
+
+function do_action(heroes, cur_id, record) {
     'use strict'
     let skill = false
     if (skill) {
@@ -78,13 +102,9 @@ function do_action(heros, cur_id, record) {
     }
     else{
         // 平A
-        let targets = get_targets(cur_id, 'single', function(p){
+        let targets = get_targets(heroes, cur_id, 'single', function(p){
             return p
         })
-        let text = ''
-        for (i in targets) {
-            //code
-            text += cur_id + '攻击了' + i + '\n'
-        }
+        do_damages(heroes[cur_id], targets, 100, record)
     }
 }

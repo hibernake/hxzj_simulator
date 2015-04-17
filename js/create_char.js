@@ -27,16 +27,15 @@ function add_char(parent, num) {
     parent.appendChild(document.createElement('br'))
     
     var hp_span = document.createElement('span')
-    
-    var attack_span = document.createElement('span')
-    
-    var defence_span = document.createElement('span')
+    var en_span = document.createElement('span')
+    var att_span = document.createElement('span')
+    var def_span = document.createElement('span')
     
     parent.appendChild(hp_span)
+    parent.appendChild(en_span)
     parent.appendChild(document.createElement('br'))
-    parent.appendChild(attack_span)
-    parent.appendChild(defence_span)
-    
+    parent.appendChild(att_span)
+    parent.appendChild(def_span)
     
     hero_view = {
         parent : parent,
@@ -44,20 +43,36 @@ function add_char(parent, num) {
         kind : kind_select,
         rank : rank_select,
         level : level_select, 
-        hp : hp_span, 
-        attack : attack_span, 
-        defence : defence_span,
+        hp : hp_span,
+        en : en_span, 
+        att : att_span, 
+        def : def_span,
     }
     
-    var hero = {
-        view : hero_view,
-        type : '',
-        kind : '',
-        hp : 0,
-        HP_MAX : 0,
-        attack : 0,
-        defence : 0,
+    function Hero(hero_view){
+        this.view = hero_view
+        this.type = ''
+        this.kind = ''
+        this.hp = 0
+        this.en = 0
+        this.HP_MAX = 0
+        this.att = 0
+        this.def = 0
+        this.add_en = function(n){
+            this.en += n
+            if (this.en>10) {
+                this.en=10
+            }
+        }
+        this.get_damage = function(n){
+            this.hp -= n
+            if (this.hp<0) {
+                this.hp = 0
+            }
+        }
     }
+    
+    var hero = new Hero(hero_view)
     
     set_kind(hero)
     
@@ -74,8 +89,9 @@ function add_char(parent, num) {
 
 function update_hero_view(hero) {
     hero.view.hp.innerHTML = 'HP: ' + hero.hp
-    hero.view.attack.innerHTML = 'ATT:' + hero.attack
-    hero.view.defence.innerHTML = '  DEF:' + hero.defence
+    hero.view.en.innerHTML = '  EN: ' + hero.en
+    hero.view.att.innerHTML = 'ATT:' + hero.att
+    hero.view.def.innerHTML = '  DEF:' + hero.def
 }
 
 
@@ -105,8 +121,8 @@ function set_kind(hero) {
     hero.kind = val
     
     hero.hp = CHAR_DATAS[val].hp
-    hero.attack = CHAR_DATAS[val].att
-    hero.defence = CHAR_DATAS[val].def
+    hero.att = CHAR_DATAS[val].att
+    hero.def = CHAR_DATAS[val].def
     
     update_hero_view(hero)
 }
